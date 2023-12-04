@@ -1,102 +1,74 @@
 <template>
-   <ion-page>
-    
+  <ion-page>
+
     <ion-header :translucent="true">
-      <h1>Noticia</h1>
-      
+      <ion-toolbar>
+        <ion-title class="header-title">JUEGOS</ion-title>
+      </ion-toolbar>
     </ion-header>
-  
-    <ion-content :fullscreen="true">
-      <ion-list>
-        <ion-item v-for="noticia in noticias" :key="noticia.author" @click="selectNew(noticia.url)">
-          <ion-label>
-            <p>{{ noticia.author }}</p>
-          </ion-label>
+
+    <ion-content :fullscreen="true" class="content-container">
+      <ion-list class="platform-list">
+        <ion-item v-for="platform in platforms" :key="platform" class="platform-item">
+          <router-link :to="'/games/' + platform" class="platform-link">
+            <ion-label class="platform-label">
+              {{ platform }}
+            </ion-label>
+          </router-link>
         </ion-item>
-      </ion-list>     
-      <ion-modal :isOpen="open">
-        <ion-header>
-          <ion-toolbar>
-            <ion-buttons slot="start">
-              <ion-button @click="open=false">Cancel</ion-button>
-            </ion-buttons>
-            <ion-title>Welcome</ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content class="ion-padding">
-          <new-app :newUrl="currentUrl"/>
-        </ion-content>
-      </ion-modal>
+      </ion-list>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButtons,   IonButton,
-  IonModal,  IonInput } from '@ionic/vue';
-import FootServices from '@/services/FootServices';
-import NewApp from '@/componentes/NewApp.vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButtons, IonButton, IonModal, IonInput } from '@ionic/vue';
 
 export default {
-  components:{
-    IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButtons, IonButton,
-    IonModal,  IonInput, NewApp
+  components: {
+    IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButtons, IonButton, IonModal, IonInput
   },
   data() {
     return {
-      noticias: [],
-      currentUrl:"",
-      open: false
+      platforms: ['PC', 'Nintendo Switch', 'Multi-platform', 'Game Boy', 'NES', 'PlayStation 4']
     };
   },
-  async created() {
-    try {
-      const response = await FootServices.getTitulares();
-      this.noticias = response.articles;
-      console.log(this.noticias)
-    } catch (error) {
-      console.error(error);
-    }
-  },
-  methods: {
-    selectNew(url){
-      this.currentUrl = url;
-      this.open=true
-      console.log(this.currentUrl)
-    }
-  }
 };
 </script>
 
 <style scoped>
 
-#container {
-  text-align: center;
-  
-  position: absolute;
-  left: 0;
-  right: 0;
-  
+.header-title {
+  font-size: 24px;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  
-  color: #8c8c8c;
-  
-  margin: 0;
+.platform-list {
+  width: 100%;
+  max-width: 400px; 
 }
 
-#container a {
+.platform-item {
+  border-bottom: 1px solid #eee;
+}
+
+.platform-link {
+  display: flex;
+  align-items: center;
   text-decoration: none;
+  color: #333;
 }
-#imagen{
-  background-image: url('assets/imagen-local.jpg'); background-size: cover; width: 100%; height: 200px;
+
+.platform-label {
+  font-size: 18px;
+  margin: 10px;
 }
 </style>
+
