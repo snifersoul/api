@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { IonContent, IonPage, IonItem, IonLabel } from '@ionic/vue';
-import gameService from "../services/FootServices"
+import gameService from "../services/FootServices";
 
 export default {
   components: {
@@ -33,7 +33,11 @@ export default {
     };
   },
   created() {
-    this.games = gameService.getJuegoByPlatform(this.$route.params.platform)
+    // Obtener juegos sin ordenar
+    const unsortedGames = gameService.getJuegoByPlatform(this.$route.params.platform);
+    
+    // Ordenar juegos alfabéticamente por título
+    this.games = unsortedGames.sort((a, b) => a.title.localeCompare(b.title));
   },
   methods: {
     volverPaginaAnterior() {
